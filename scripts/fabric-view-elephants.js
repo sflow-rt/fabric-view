@@ -189,7 +189,7 @@ setIntervalHandler(function() {
   var now = (new Date()).getTime();
 
   updateElephants(now);
-        updateBusyLinks(now);
+  updateBusyLinks(now);
 
   points = {};
 
