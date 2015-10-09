@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fabric View</title>
+<link rel="stylesheet" href="../../../inc/inmsf/main.css" type="text/css">
+<link rel="stylesheet" href="../../../inc/jquery-ui/jquery-ui.structure.min.css" type="text/css">
+<link rel="stylesheet" href="../../../inc/jquery-ui/jquery-ui.theme.css" type="text/css">
+<link rel="stylesheet" href="../../../inc/DataTables/css/dataTables.jqueryui.css" type="text/css">
+<link rel="stylesheet" href="../../../inc/stripchart.css" type="text/css">
+<link rel="stylesheet" href="css/app.css" type="text/css">
+<script type="text/javascript" src="../../../inc/jquery.min.js"></script>
+<script type="text/javascript" src="../../../inc/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../../../inc/DataTables/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../../inc/DataTables/js/dataTables.jqueryui.min.js"></script>
+<script type="text/javascript" src="../../../inc/jquery.stripchart.js"></script>
+<script type="text/javascript" src="../../../inc/stripchart.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
+</head>
+<body>
+  <div id="titleBar"><div id="product"><span id="logo"></span>Fabric View</div></div>
+  <div id="tabs">
+    <span id="clone">
+       <button id="clone_button">New Window</button>
+    </span>
+    <ul>
+      <li><a href="#performance">Performance</a></li>
+      <li><a href="#traffic">Traffic</a></li>
+      <li><a href="#top">Top Flows</a></li>
+      <li><a href="#switches">Switches</a></li>
+      <li><a href="#links">Links</a></li>
+      <li><a href="#hosts">Hosts</a></li>
+      <li><a href="#settings">Settings</a></li>
+      <li><a href="#help">Help</a></li>
+    </ul>
+    <div id="performance">
+      <div id="performance-acc">
+	<div>
+	  <h3>Total Traffic</h3>
+	  <div>
+            <div id="total" class="trend"></div>
+	    <div id="total_fps" class="trend"></div>
+	  </div>
+	</div>
+	<div>
+	  <h3>Discards and Errors</h3>
+	  <div>
+	    <div id="discards" class="trend"></div>
+            <div id="errors" class="trend"></div>
+	  </div>
+	</div>
+	<div>
+	  <h3>Busy Spine Links</h3>
+	  <div>
+            <div id="congested-links" class="trend"></div>
+	  </div>
+	</div>
+	<div>
+	  <h3>Elephant Flows</h3>
+	  <div>
+            <div id="current" class="trend"></div>
+            <div id="arrivals-departures" class="trend"></div>
+	  </div>
+	</div>
+	<div>
+	  <h3>Average Elephant Flow Duration and Rate</h3>
+	  <div>
+	    <div id="duration" class="trend"></div>
+	    <div id="rate" class="trend"></div>
+	  </div>
+	</div>
+        <div>
+          <h3>Most Utilized Switch Resource</h3>
+          <div>
+            <div id="cpu" class="trend"></div>
+            <div id="acl" class="trend"></div>
+            <div id="fwd" class="trend" style="height:170px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="traffic">
+      <div id="traffic-acc">
+        <div>
+          <h3>Protocols</h3>
+          <div>
+            <div id="topprotocols" class="trend"></div>
+	  </div>
+	</div>
+	<div>
+	  <h3>Source and Destination Addresses</h3>
+	  <div>
+            <div id="topsources" class="trend"></div>
+            <div id="topdestinations" class="trend"></div>
+            <div id="toppairs" class="trend"></div>
+	  </div>
+	</div>
+	<div>
+	  <h3>Source and Destination Groups</h3>
+	  <div>
+	    <div id="topsourcegroups" class="trend"></div>
+	    <div id="topdestinationgroups" class="trend"></div>
+            <div id="topgrouppairs" class="trend"></div>
+          </div>
+        </div>
+	<div>
+	  <h3>TCP/UDP Flows</h3>
+	  <div>
+	    <div id="topflows" class="trend"></div>
+	  </div>
+	</div>
+      </div>
+    </div>
+    <div id="top">
+      <fieldset>
+      <legend>Flow Specification</legend>
+      <div id="flowspec">
+        <input id="keys" type="text" placeholder="Keys" size="50" autocomplete="off">
+	<input id="value" type="text" placeholder="Value" size="10" autocomplete="off">
+	<input id="filter" type="text" placeholder="Filter" size="50" autocomplete="off">
+        <button id="cleardef">Clear</button>
+        <button id="submitdef">Submit</button>
+      </div>
+      </fieldset>
+      <div id="flowtable">
+      </div>
+      <table id="shortcutstable" class="display" cellspacing="0" width="100%">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Protocol</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+      </table> 
+    </div>
+    <div id="switches">
+      <fieldset>
+	<legend>Summary</legend>
+        <label for="nodecount">Total Switches:</label>
+        <input id="nodecount" name="nodecount" size="6" readonly>
+        <label for="nodesdisconnected">Unlinked Switches:</label>
+        <input id="nodesdisconnected" name="nodesdisconnected" size="6" readonly>
+        <label for="portsdown">Ports Down:</label>
+        <input id="portsdown" name="portsdown" size="6" readonly>
+	<button id="refreshnodes">Refresh</button>
+      </fieldset>
+      <table id="nodestable" class="display" cellspacing="0" width="100%">
+	<thead>
+	  <tr>
+            <th></th>
+	    <th>Switch</th>
+            <th>%CPU</th>
+            <th>%Memory</th>
+            <th>%Disk</th>
+            <th>%Disk Part.</th>
+            <th>Up Days</th>
+	    <th>Links</th>
+            <th>Ports</th>
+            <th>Ports Down</th>
+	  </tr>
+	</thead>
+      </table>
+    </div>
+    <div id="links">
+      <fieldset>
+	<legend>Summary</legend>
+	<label for="linkcount">Total:</label>
+	<input id="linkcount" name="linkcount" size="6" readonly>
+	<label for="linkstatuscount">Down:</label>
+	<input id="linkstatuscount" name="linkstatuscount" size="6" readonly>
+	<label for="linkcounterscount">Missing Counters:</label>
+	<input id="linkcounterscount" name="linkcounterscount" size="6" readonly>
+	<label for="linksflowscount">Missing Flows:</label>
+	<input id="linkflowscount" name="linkflowscount" size="6" readonly>
+	<button id="refreshlinks">Refresh</button>
+      </fieldset>
+       <table id="linkstable" class="display" cellspacing="0" width="100%">
+	 <thead>
+	   <tr>
+	     <th>Link</th>
+	     <th>Switch 1</th>
+	     <th>Port 1</th>
+	     <th>Switch 2</th>
+	     <th>Port 2</th>
+	     <th>Speed</th>
+	     <th>Status</th>
+	     <th>Counters</th>
+	     <th>Flows</th>
+	 </thead>
+       </table>
+    </div>
+    <div id="hosts">
+      <fieldset>
+	<legend>Summary</legend>
+        <label for="hostcount">Total:</label>
+        <input id="hostcount" name="hostcount" size="6" readonly>
+	<button id="refreshhosts">Refresh</button>
+      </fieldset>
+      <table id="hoststable" class="display" cellspacing="0" width="100%">
+	<thead>
+	  <tr>
+	    <th>Switch</th>
+	    <th>Port</th>
+            <th>VLAN</th>
+            <th>Host MAC</th>
+            <th>Host Vendor</th>
+            <th>Host IP</th>
+            <th>Host IP6</th>
+	  </tr>
+	</thead>
+      </table>
+    </div>
+    <div id="settings">
+      <fieldset>
+         <legend>Thresholds</legend>
+         <label for="elephant">Elephant (Link Bandwidth %):</label>
+         <input id="elephant" name="elephant" size="3">
+         <label for="utilization">Busy (Link Utilization %):</label>
+         <input id="utilization" name="utilization" size="3">
+         <button id="thresholdget">Refresh</button>
+         <button id="thresholdset">Upload</button>
+      </fieldset>
+      <fieldset>
+         <legend>Topology</legend>
+         <label for="topologynodes">Switches:</label>
+         <input id="topologynodes" name="topologynodes" size="5" readonly>
+         <label for="topologylinks">Links:</label>
+         <input id="topologylinks" name="topologylinks" size="5" readonly>
+         <button id="topologyrefresh">Refresh</button>
+         <input type="file" name="topologyfile" id="topologyfile" multiple="false" accept="application/json" />
+         <button id="topologyset">Upload</button>
+         <button id="topologyget">Inspect</button>
+      </fieldset>
+      <fieldset>
+         <legend>IP Address Groups</legend>
+         <label for="numgroups">Groups:</label>
+         <input id="numgroups" name="numgroups" size="5" readonly>
+         <label for="numcidrs">CIDRs:</label>
+         <input id="numcidrs" name="numcidrs" size="5" readonly>
+         <button id="groupsrefresh">Refresh</button>
+         <input type="file" name="groupsfile" id="groupsfile" multiple="false" accept="application/json" />
+         <button id="groupsset">Upload</button>
+         <button id="groupsget">Inspect</button>
+      </fieldset>
+      <fieldset>
+         <legend>Flow Shortcuts</legend>
+         <label for="numshortcuts">Shortcuts:</label>
+         <input id="numshortcuts" name="numshortcuts" size="5" readonly>
+         <button id="shortcutsrefresh">Refresh</button>
+         <input type="file" name="shortcutsfile" id="shortcutsfile" multiple="false" accept="application/json" />
+         <button id="shortcutsset">Upload</button>
+         <button id="shortcutsget">Inspect</button>
+      </fieldset>
+    </div>
+    <div id="help">
+      <div id="help-acc">
+	<div>
+	  <h3>About</h3>	  
+	  <div>
+	    <p><em>Fabric View</em> provides real-time monitoring of an ECMP or MLAG based network pod using standard sFlow measurements from data center switches.</p>
+            <p><b>Note:</b> Certain Fabric View features rely on the following sFlow extensions:</p>
+            <ul>
+               <li><a href="http://sflow.org/sflow_lag.txt">sFlow LAG Counters Structure</a></li>
+               <li><a href="http://sflow.org/sflow_host.txt">sFlow Host Structures</a></li>
+               <li><a href="http://sflow.org/sflow_openflow.txt">sFlow OpenFlow Structures</a></li>
+            </ul>
+            <p>Ask your network vendor if they currently or have plans to support these extensions.</p>
+	  </div>    
+	</div>
+        <div>
+          <h3>Getting Started</h3>	    
+          <div>
+	    <p>The Fabric View server should have an interface connected to the out-of-band management network connecting the switches in the pod.</p>
+	    <p>The following steps are needed to enable Fabric View:</p>
+	    <ol>
+	      <li>Configure sFlow agents on all the switches in the pod</li>
+	      <li>Configure Fabric View with the pod topology</li>
+	    </ol>
+            <p>Certain features of Fabric View rely on vendors implementing the following sFlow extensions:</p>
+            <ul>
+            </ul>
+            <p><b>Note:</b> Data will not appear in Fabric View until both steps have been completed.</p>
+          </div>
+        </div>
+        <div>
+          <h3>Configure sFlow agents</h3>
+          <div>
+             <p><a href="http://blog.sflow.com/2012/09/switch-configurations.html">Switch configurations</a> contains a repository of links describing how to configure sFlow on different vendor's switches.</p>
+	     <p>Apply the following settings to every switch and port in the pod (include all leaf, spine and host ports):</p>
+	     <table class="stripe">
+	       <thead><tr><th>Port Speed</th><th>Sampling Rate</th><th>Polling Interval</th></tr></thead>
+	       <tbody>
+		 <tr class="even"><td class="alignr">1 Gbit/s</td><td class="alignr">1-in-1,000</td><td class="alignr">20 seconds</td></tr>
+		 <tr class="odd"><td class="alignr">10 Gbit/s</td><td class="alignr">1-in-10,000</td><td class="alignr">20 seconds</td></tr>
+		 <tr class="even"><td class="alignr">25 Gbit/s</td><td class="alignr">1-in-25,000</td><td class="alignr">20 seconds</td></tr>
+		 <tr class="odd"><td class="alignr">40 Gbit/s</td><td class="alignr">1-in-40,000</td><td class="alignr">20 seconds</td></tr>
+		 <tr class="even"><td class="alignr">50 Gbit/s</td><td class="alignr">1-in-50,000</td><td class="alignr">20 seconds</td></tr>
+		 <tr class="odd"><td class="alignr">100 Gbit/s</td><td class="alignr">1-in-100,000</td><td class="alignr">20 seconds</td></tr>
+	       </tbody>
+	     </table>
+	     <p><b>Note:</b> sFlow instrumentation is build into data center switch ASICs and enabling monitoring should not impact performance. However, not all implementations are equal and it is prudent to verify that these settings do not generate excessive management CPU load and that switches don't drop samples during traffic peak loads.</p>
+          </div>
+        </div>
+	<div>
+	  <h3>Configure Fabric View with pod topology</h3>
+	  <div>
+	    <p>Fabric View topology configuration is a JSON object. The following example illustrates the format:</p>
+	    <pre>{
+ &quot;links&quot;: {
+  &quot;L1&quot;: {
+   &quot;node1&quot;: &quot;leaf1&quot;,
+   &quot;port1&quot;: &quot;swp1s0&quot;,
+   &quot;node2&quot;: &quot;spine1&quot;,
+   &quot;port2&quot;: &quot;swp49&quot;
+  },
+  ...
+ }
+}</pre>
+<p>The topology.json file can be manually posted via the Settings tab in Fabric View's web interface, or through the REST API, e.g.:</p>
+<pre>curl -H 'Content-Type:application/json' -X PUT --data @topology.json http://127.0.0.1:8008/app/scripts/fabric-view.js/topology/json</pre>
+<h4>Cumulus Linux</h4>
+	    <p>The above example is equivalent to the following <a href="http://docs.cumulusnetworks.com/display/CL25/Prescriptive+Topology+Manager+-+PTM">Prescriptive Topology Manager (PTM)</a> dot file:</p>
+	    <pre>graph G {
+  graph [hostidtype=&quot;hostname&quot;, version=&quot;1:0&quot;];
+  &quot;leaf1&quot;:&quot;swp1s0&quot; -- &quot;spine1&quot;:&quot;swp49&quot;;
+  ...
+}</pre>
+<p>The <a href="https://raw.githubusercontent.com/pphaal/acl_server/master/ptm.py">ptm.py</a> script converts a PTM dot file to Fabric Views JSON format, for example:</p>
+<pre>wget https://raw.githubusercontent.com/pphaal/acl_server/master/ptm.py
+chmod +x ptm.py
+ptm.py &lt; topology.dot &gt; topology.json</pre>
+<p>The topology must contain all inter-switch links, in particular when monitoring a <a href="http://docs.cumulusnetworks.com/display/CL25/Multi-Chassis+Link+Aggregation+-+CLAG+-+MLAG">CLAG</a> pod, include the peer switch connections.</p>
+<p>Note: If PTM is not being used to verify switch configurations, <a href="http://blog.sflow.com/2015/03/topology-discovery-with-cumulus-linux.html">Topology discovery with Cumulus Linux</a> describes an alternative method using LLDP.</p>
+<h4>Arista EOS</h4>
+<p>Arista <a href="https://eos.arista.com/fabric-visibility/">EOS Central: Fabric Visibility</a> article provides scripts for retrieving topology using eAPI</p>
+<h4>Other Vendors</h4>
+<p>If switches do not implement the extensions that allow naming information to be exporting using sFlow, then configuring <a href="http://sflow-rt.com/reference.php#properties">sFlow-RT Properties</a> to enable SNMP simplifies the contruction of the topology links information since the topology can be expressed in terms of
+switch and port names. Alternatively, a nodes section can be added to the topology to provide the mapping from switch and port names to sFlow agent address and port SNMP ifIndex numbers, e.g.</p>
+<pre>{
+ &quot;nodes&quot;: {
+  &quot;leaf1&quot;: {
+    &quot;agen&quot;:&quot;10.0.0.253&quot;,
+    &quot;ports&quot;:{
+      &quot;swp1s0&quot;:{&quot;ifindex&quot;:&quot;4&quot;},
+      ...
+    }
+  }
+ },
+ &quot;links&quot;: {
+   ...
+}</pre>
+	  </div>
+	</div>
+        <div>
+          <h3>Verify that pod is fully monitored</h3>
+          <div>
+            <p>The <i>Switches</i> and <i>Links</i> pages can be used to verify that all the switches and links specified in the pod topology are being monitored. Each page has a refresh button in the summary bar that retrieves current information and updates the display.</p>
+            <h4>Switches</h4>
+            <p>All sources of sFlow data are shown. Switches that are not part of the pod topology (indicated by zero in the <i>Links</i> column) will be ignored Fabric View and should be removed as an sFlow collector in the configuration for these agents. Click on the green + icon to get details about a particular switch and its interfaces.</p>
+            <h4>Links</h4>
+            <p>All the links in the specified topology are shown along with information indicating operational status and reception of counter and flow data from each both ends of the link.</p>
+          </div>
+        </div>
+        <div>
+          <h3>Monitoring pod performance</h3>
+          <div>
+	    <h4>Total Traffic</h4>
+	    <p>The top graph shows the total amount of traffic entering edge ports on the leaf switches broken out into large flows, &quot;Elephants&quot; and small flows, &quot;Mice&quot; Elephant flows consume significant bandwidth and can be actively managed, so the greater the fraction of Elephant traffic, the greater the opportunity to improve performance through traffic engineering of large flows.</p>
+	    <p>The bottom graph shows the total packets per second entering edge ports on the leaf switches.</p>
+	    <h4>Discards and Errors</h4>
+	    <p>The <i>Discards</i> and <i>Errors</i> charts show totals across all switch ports in the pod. Discards occur when there is congestion in the network and suggest an opportunity to improve performance. Errors should always be zero and any rise in error rates should be tracked down to the ports involved.</p>
+	    <h4>Busy Spine Links</h4>
+	    <p>The chart shows the number of inter-switch / spine links that are heavily utilized. The busy links are classified into three groups, Elephant, Mice, and Collision.</p>
+	    <dl>
+	      <dt>Elephant</dt><dd>The busy spine link is carrying a single Elephant flow</dd>
+	      <dt>Collision</dt><dd>The busy spine link is carrying two or more Elephant flows</dd>
+	      <dt>Mice</dt><dd>The busy spine link has no Elephant flows, i.e. many small flows</dd>
+	    </dl>
+	    <p>Typically the number busy spine links is much smaller than the total number of links available through multi-path forwarding. Load balancing the paths taken by Elephant flows can significantly increase throughput. Using priority queueing to separate Elephant and Mice flows on busy spine links can significantly reduce transaction latency.</p>
+	    <h4>Elephant Flows</h4>
+	    <p>The upper chart shows the number of concurrent Elephant flows and provides useful sizing information on the number of active controls that would be required to manage the traffic. The lower chart shows the rate at which Elephant flows starts (Arrivals) and end (Departures) which proves useful sizing information on how many controller operations per second would be required to engineer the Elephant flows.</p>
+	    <h4>Average Elephant Flow Duration and Rate</h4>
+	    <p>A moving average (over the last 100 Elephant flows) of the duration and data transfer rate of an Elephant flow.</p>
+	    <h4>Most Utilized Switch Resource</h4>
+	    <p>Charts track utilization of switch resources, including CPU, Memory, Disk for the management processor and hardware tables in the switch chip. The charts trend the maximum across all switches in the pod and will detect if any switch becomes overloaded.</p>
+	  </div>
+        </div>
+        <div>
+          <h3>Monitoring traffic trends</h3>
+          <div>
+	    <p>The charts show traffic entering edge ports on the leaf switches broken out by different flow attributes. Click on any peak in a traffic chart to see the top 5 flows present at the selected second and their traffic in any surrounding seconds. The selected second is indicated by an outlined time stamp on the time axis. The legend in the top left of the chart shows the colors assigned to the top flows during the selected second. &quot;Other&quot; traffic is indicated in gray. This is traffic that is in the top 5 flows but is not in the top 5 of the selected second. Click on any gray interval to examine the top 5 flows at that time.</p>
+	    <p><b>Note:</b> These charts show subsets of the traffic entering the network. The <i>Total Traffic</i> chart under the <i>Performance</i> tab provides shows the total traffic entering the network.</p>
+	    <h4>Protocols</h4>
+	    <p>The protocols chart shows the sequence of protocol headers seen in packets. For example, <i>eth.ip.tcp</i> refers to packets with an Ethernet header followed by an IP header followed by a TCP header.</p>
+	    <h4>Source and Destination Addresses</h4>
+	    <p>The charts break out traffic by source addresses, destination addresses, and source/destination pairs.</p>
+	    <h4>Source and Destination Groups</h4>
+	    <p>The charts break out traffic by source group, destination group, and source/destination group pairs. See <i>IP Address Groups</i> in the <i>Settings</i> section for information on configuring address groups.</p>
+	    <h4>TCP/UDP Flows</h4>
+	    <p>The largest TCP / UDP flows broken out by addresses and ports. If flow is exceeds bandwidth threshold it will be classified as an Elephant.</p>
+	  </div>
+        </div>
+        <div>
+          <h3>Monitoring top flows</h3>
+          <div><p>The <i>Top Flows</i> tab is used to define and monitor specific flows. Flows are defined using the <i>Flow Specification</i> form.</p>
+          <dl>
+             <dt>keys:</dt><dd>list of flowkey attributes, e.g. ipsource,ipdestination</dd>
+             <dt>value:</dt><dd>Numeric flowkey attribute, e.g. <i>bps</i>, <i>fps</i>, <i>frames</i>, <i>bytes</i></dd>
+             <dt>filter:</dt><dd>boolean expression filtering flowkeys. Filter expressions are of the form &lt;flowkey&gt;&lt;operator&gt;&lt;value&gt; The = (equals), != (not equals), ~ (match regexp), and !~ (not match regexp) operators are available to compare the flowkey with a comma separated list of values. Filter expressions can be combined using &amp;, |, (, and ), e.g. (ipsource=10.0.0.1|ipdestination=10.0.0.1)&ipprotocol=1,6,17</dd>
+          </dl>
+          <p>The shortcuts table below the form contains pre-defined flow specifications. Clicking on a row in the shortcuts table enters settings in the <i>Flow Specification</i> form and starts monitoring flows. Clicking on the clear button in the <i>Flow Specification</i> form removes definition and returns the shortcuts table.</p>
+          <p>Flow specifications can be entered directly into the form. An incremental search menu lists available options when entering text into the form. Available flow keys vary depending on the traffic being monitored, but the following are the basic layer 2, 3, and 4 protocol fields that are typically present:</p>
+          <dl>
+             <dt>Ethernet</dt><dd>macsource, macdestination, ethernetprotocol, isbroadcast, ismulticast, isunicast</dd>
+             <dt>IP</dt><dd>ipsource, ipdestination, ipprotocol, iptos, ipdscp</dd>
+             <dt>TCP</dt><dd>tcpsourceport, tcpdestinationport, tcpflags</dd>
+             <dt>UDP</dt><dd>udpsourceport, udpdestinationport</dd>
+          </dl>
+          <p>Tunneling can cause fields to appear multiple times in the packet. Fabric View adds a suffix to the flow key to indicate depth in the protocol stack, for example, a VxLAN encapsulated IP packet would have the following attributes, macsource, ipsource, macsource.1, ipsource.1, etc. Fields with a .1 suffix are the second occurence of the field in the packet and represent the inner (tenant) addresses.</p>
+          <p>Functions of the form &lt;funcname&gt;:&lt;arg1&gt;:&ltarg2&gt;... can be applied used to define a flowkey or in a filter:</p>
+          <dl>
+             <dt>group:&lt;flowkey&gt;:&lt;fv&gt;</dt><dd>Applies the configured <i>IP Address Groups</i> to a flow key and returns the group name, e.g. group:ipsource:fv or group:ipdestination:fv</dd>
+             <dt>oui:&lt;flowkey&gt;:&ltnumber|name&gt;</dt><dd>Extracts the three octet Organizationally Unique Identifier (OUI) prefix from a MAC address, optionally looking up the assigned vendor name, e.g. oui:macsource or oui:macsource:name</dd>
+             <dt>mask:&lt;flowkey&gt;:&lt;mask_bits&gt;</dt><dd>Applies a mask to an IP address, e.g. mask:ipsource:24</dd>
+             <dt>null:&lt;flowkey&gt;:&lt;null_value&gt;</dt><dd>Allows flows to be defined with missing fields, e.g. null:vlan:undefined</dd>
+             <dt>or:&lt;flowkey1&gt;:&ltflowkey2&gt;</dt><dd>Selects the first non-null field from a list, e.g. or:ipsource:ip6source</dd>
+             <dt>eq:&lt;flowkey1&gt;:&ltflowkey2&gt;</dt><dd>Returns true if the values referenced by the flow keys are equal, e.g. eq:ipsource:ipdestination</dd>
+             <dt>range:&lt;flowkey&gt;:&ltlower&gt;:&lt;upper&gt;</dt><dd>Return true if the value is included in the range,  e.g. range:tcpsourceport:0:1023</dd>
+          </dl>
+         </div>
+	</div>  
+        <div>
+          <h3>Locate a host</h3>
+          <div>
+            <p>The <i>Hosts</i> tab contains a table that lists all hosts and the switch and port connecting them to the pod. In the case of an CLAG configuration, both switches and CLAG ports are shown. The table has a search box in the top right that can be used find a host by its MAC, IP, or IPv6 address, or to find the hosts connected to a specific switch. Click on the refresh button in the <i>Summary</i> section to ensure that the most recent location information is available.</p>
+          </div>
+        </div>
+	<div>
+	  <h3>Settings</h3>
+	  <div>
+	    <p>The <i>Settings</i> tab provides access to the following options:</p>
+	    <h4>Thresholds</h4>
+	    <p>Fabric View defines an <i>Elephant</i> as a UDP or TCP flow that exceeds the defined percentage of link bandwidth. For example, if access port speeds are 1Gbit/sec. and the threshold is set to 10%, then an Elephant flow is any flow that exceeds 100Mbits/sec. The default value of 10% is the minimum value that should be used with the Host sFlow agent default sampling rates. Setting the threshold to less than 10% will result in false positives in the Elephant detection and poor accuracy in related analytics. Set the threshold to greater than 10% to change the definition so that only larger (and fewer) flows will be classified Elephants.</p>
+	    <p>The <i>Busy</i> threshold is a percent of link bandwidth that determines whether a link is regarded as fully utilized. Fabric View applies the threshold in the <i>Busy Spine Links</i> chart under the <i>Performance</i> tab to show how many inter-switch (spine) links are busy.</p>
+	    <h4>Topology</h4>
+	    <p>The <i>Switches</i> and <i>Links</i> counts verify that a topology has been configured and can be used to check that a full topology for the pod has been installed. Buttons are available to refresh the counts, upload a new topology, and inspect the installed topology. See the <i>Configure Fabric View with pod topology</i> help topic for more information.</p>
+	    <h4>IP Address Groups</h4>
+	    <p>Address groups are used to lists of IP addresses or CIDRs. Address groups are represented as a JSON object. The following example shows the format:</p>
+	    <pre>{
+ "external": [
+  "0.0.0.0/0",
+  "::/0"
+ ],
+ "private": [
+  "10.0.0.0/8",
+  "172.16.0.0/12",
+  "192.168.0.0/16",
+  "FC00::/7"
+ ],
+ "multicast": [
+  "224.0.0.0/4"
+ ]
+}</pre>
+	    <p>The <i>Groups</i> and <i>CIDRs</i> counts verify that groups have been installed. Buttons are available to refresh the counts, upload new groups, and inspect the installed groups. Uploading a groups file with the CIDRs associated with each rack of servers in the pod allows Fabric View to display rack to rack traffic flows.</p>
+	    <h4>Flow Shortcuts</h4>
+	    <p>Shortcuts are the pre-configured flow definitions in the <i>Top Flows</i> table. Shortcuts are represented as a JSON object. The following example shows the format:</p>
+	    <pre>[
+ {
+  "category": "Traffic",
+  "protocol": "IP",
+  "description": "Sources",
+  "keys": "ipsource",
+  "value": "bps",
+  "filter": ""
+ },
+ ...
+]</pre>
+	    <p>The <i>Shortcuts</i> count verifies that shortcuts have been installed. Button are available to refresh the counts, upload new shortcuts, and inspect installed shortcuts.</p>
+	  </div>
+	</div>
+	<div>
+	  <h3>REST API</h3>
+	  <div>
+	    <p>The Fabric View user interface is built on a set of REST API calls that can be used to configure the software and retrieve data.</p>
+            <table class="stripe">
+              <thead><tr><th>URL</th><th>Operations</th><th>Description</th></tr></thead>
+              <tbody>
+		<tr class="even"><td>scripts/fabric-view.js/thresholds/json</td><td>GET, PUT, POST</td><td>Manage Elephant and Busy Link thresholds</td></tr>
+		<tr class="odd"><td>scripts/fabric-view.js/topology/json</td><td>GET, PUT, POST</td><td>Manage topology</td></tr>
+		<tr class="even"><td>scripts/fabric-view.js/groups/json</td><td>GET, PUT, POST</td><td>Manage IP groups</td></tr>
+		<tr class="odd"><td>scripts/fabric-view.js/shortcuts/json</td><td>GET, PUT, POST</td><td>Manage Top Flows shortcuts</td></tr>
+		<tr class="even"><td>scripts/fabric-view.js/metric/json</td><td>GET</td><td>Get latest metric values</td></tr>
+		<tr class="odd"><td>scripts/fabric-view.js/metric/{name}/json</td><td>GET</td><td>Get latest value of named metric</td></tr>
+		<tr class="even"><td>scripts/fabric-view.js/nodes/json</td><td>GET</td><td>Get information on switches</td></tr>
+		<tr class="odd"><td>scripts/fabric-view.js/links/json</td><td>GET</td><td>Get information on links</td></tr>
+		<tr class="even"><td>scripts/fabric-view.js/hosts/json</td><td>GET</td><td>Get information on hosts</td></tr>
+              </tbody>
+            </table>
+	  </div>
+	</div>
+      </div>
+    </div>
+  </div>
+  <div id="copyright">Copyright &copy; 2015 InMon Corp. ALL RIGHTS RESERVED</div>
+</body>
+</html>

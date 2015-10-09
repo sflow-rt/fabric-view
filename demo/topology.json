@@ -1,0 +1,52 @@
+{
+ "links": {
+  "L1": {
+   "node1": "leaf1",
+   "node2": "spine1",
+   "port1": "swp1s0",
+   "port2": "swp49"
+  },
+  "L2": {
+   "node1": "leaf1",
+   "node2": "spine1",
+   "port1": "swp1s1",
+   "port2": "swp50"
+  },
+  "L3": {
+   "node1": "leaf1",
+   "node2": "spine2",
+   "port1": "swp1s2",
+   "port2": "swp51"
+  },
+  "L4": {
+   "node1": "leaf1",
+   "node2": "spine2",
+   "port1": "swp1s3",
+   "port2": "swp52"
+  },
+  "L5": {
+   "node1": "leaf2",
+   "node2": "spine2",
+   "port1": "swp1s0",
+   "port2": "swp49"
+  },
+  "L6": {
+   "node1": "leaf2",
+   "node2": "spine2",
+   "port1": "swp1s1",
+   "port2": "swp50"
+  },
+  "L7": {
+   "node1": "leaf2",
+   "node2": "spine1",
+   "port1": "swp1s2",
+   "port2": "swp51"
+  },
+  "L8": {
+   "node1": "leaf2",
+   "node2": "spine1",
+   "port1": "swp1s3",
+   "port2": "swp52"
+  }
+ }
+}
