@@ -353,19 +353,6 @@ function hosts() {
   return hosts;
 }
 
-var portPat = /^swp[0-9s]+$/;
-function fixTopology(top) {
-  var links = top.links;
-  if(!links) return top;
-
-  for(var linkname in links) {
-    var {port1:p1, port2:p2} = links[linkname];
-    if(!portPat.test(p1) || !portPat.test(p2)) delete links[linkname];
-  }
-
-  return top; 
-}
-
 setHttpHandler(function(req) {
   var result, key, name, path = req.path;
   if(!path || path.length === 0) throw "not_found";
@@ -416,9 +403,8 @@ setHttpHandler(function(req) {
           case 'POST':
           case 'PUT':
             if(req.error) throw "bad_request";
-            topology = fixTopology(req.body);
             if(!setTopology(req.body)) throw "bad_request";
-            storeSet('topology',topology);
+            storeSet('topology',req.body);
             break;
           case 'GET':
             result = getTopology();
