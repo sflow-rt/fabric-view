@@ -16,15 +16,9 @@ $(function() {
   var keysURL =  usrPath + 'flowkeys/json';
   var topURL = usrPath + 'flows/json';
 
-  var backgroundColor = '#ffffff';
+  var colors = $.inmon.stripchart.prototype.options.colors;
+
   var SEP = '_SEP_';
-  var colors = [
-    '#3366cc','#dc3912','#ff9900','#109618','#990099','#0099c6','#dd4477',
-    '#66aa00','#b82e2e','#316395','#994499','#22aa99','#aaaa11','#6633cc',
-    '#e67300','#8b0707','#651067','#329262','#5574a6','#3b3eac','#b77322',
-    '#16d620','#b91383','#f4359e','#9c5935','#a9c413','#2a778d','#668d1c',
-    '#bea413','#0c5922','#743411'
-  ];
   var defaults = {
     tab:0,
     perf0:'show',
@@ -180,23 +174,17 @@ $(function() {
     metrics: ['elephant_bps','mice_bps'],
     stack:true,
     legend:['Elephants','Mice'],
-    colors: colors,
-    backgroundColor: backgroundColor,
     units: 'Bits per Second'},
   db);
   $('#total_fps').chart({
     type: 'trend',
     metrics: ['edge_fps'],
     stack:true,
-    colors: colors,
-    backgroundColor: backgroundColor,
     units: 'Frames per Second'},
   db);
   $('#elephants-mice').chart( {
     type: 'trend',
     metrics: ['elephant_bps'],
-    colors: colors,
-    backgroundColor: backgroundColor,
     stack:true,
     units: 'Bits per Second' },
   db);
@@ -206,15 +194,12 @@ $(function() {
     stack:false,
     legend: ['Arrivals','Departures'],
     colors: [colors[3],colors[4]],
-    backgroundColor: backgroundColor,
     units: 'Flows per Second' },
   db);
   $('#current').chart( {
     type: 'trend',
     metrics:['elephant_current'],
     stack:true,
-    colors: colors,
-    backgroundColor: backgroundColor,
     units: 'Number of Flows' },
   db);
   $('#congested-links').chart( {
@@ -222,62 +207,46 @@ $(function() {
     stack:true,
     metrics:['busy_links_elephant','busy_links_mice','busy_links_collision'],
     legend:['Elephant','Mice','Collision'],
-    colors: colors,
-    backgroundColor: backgroundColor,
     units:'Number of Links'},
   db);
   $('#discards').chart( {
     type:'trend',
     metrics:['discards'],
     legend:['Discards'],
-    colors:colors,
-    backgroundColor: backgroundColor,
     units:'Packets per Second'},
   db);      
   $('#errors').chart( {
     type:'trend',
     metrics:['errors'],
     legend:['Errors'],
-    colors:colors,
-    backgroundColor: backgroundColor,
     units:'Packets per Second'},
   db);
   $('#duration').chart( {
     type:'trend',
     metrics:['elephant_flow_duration'],
-    colors:colors,
-    backgroundColor: backgroundColor,
     units:'Seconds'},
   db);
   $('#rate').chart({
     type:'trend',
     metrics:['elephant_flow_rate'],
-    colors:colors,
-    backgroundColor: backgroundColor,
     units:'Bits per Second'},
   db);
   $('#cpu').chart({
     type: 'trend',
     legend: ['CPU Utilization','Load per Core','Memory Utilization','Disk Utilization','Disk Partition Utilization'],
     metrics:['cpu_util','load_per_cpu','mem_util','disk_util','part_max_util'],
-    colors:colors,
-    backgroundColor: backgroundColor,
     units: 'Percentage'},
   db);
   $('#fwd').chart({
     type: 'trend',
     legend: ['Host Table','MAC Table','IPv4 Table','IPv6 Table','IPv4/IPv6 Table','Long IPv6 Table','Total Routes','ECMP Nexthops Table'],
     metrics:['hw_host_util','hw_mac_util','hw_ipv4_util','hw_ipv6_util','hw_ipv4_ipv6_util','hw_ipv6_long_util','hw_total_routes_util','hw_ecmp_nexthops_util'],
-    colors:colors,
-    backgroundColor: backgroundColor,
     units: 'Percentage'},
   db);
   $('#acl').chart({
     type: 'trend',
     legend: ['ACL Ingress Table','ACL Ingress Meters Table','ACL Ingress Counters Table','ACL Egress Table','ACL Egress Meters Table','ACL Egress Counters Table'],
     metrics:['hw_acl_ingress_util','hw_acl_ingress_meters_util','hw_acl_ingress_counters_util','hw_acl_egress_util','hw_acl_egress_meters_util','hw_acl_egress_counters_util'],
-    colors:colors,
-    backgroundColor: backgroundColor,
     units: 'Percentage'},
   db);
 
@@ -288,8 +257,6 @@ $(function() {
     includeOther:false,
     metric: 'top-5-stack',
     legendHeadings: ['Protocol Stack'],
-    colors: colors,
-    backgroundColor: backgroundColor,
     units: 'Bits per Second'},
   db);
   $('#topsources' ).chart( {
@@ -298,8 +265,6 @@ $(function() {
     includeOther: false,
     metric:'top-5-sources',
     legendHeadings: ['Source'],
-    colors: colors,
-    backgroundColor: backgroundColor,
     units: 'Bits per Second'},
   db);
   $('#topdestinations' ).chart({
@@ -308,8 +273,6 @@ $(function() {
     includeOther: false,
     metric:'top-5-destinations',
     legendHeadings: ['Destination'],
-    colors: colors,
-    backgroundColor: backgroundColor,
     units: 'Bits per Second'},
   db);
   $('#toppairs').chart( {
@@ -318,8 +281,6 @@ $(function() {
     includeOther:false,
     metric:'top-5-pairs',
     legendHeadings: ['Source','Destination'],
-    colors: colors,
-    backgroundColor: backgroundColor,
     units: 'Bits per Second'},
   db);   
   $('#topsourcegroups' ).chart( {
@@ -328,8 +289,6 @@ $(function() {
     includeOther: false,
     metric:'top-5-sourcegroups',
     legendHeadings: ['Source Groups'],
-    colors: colors,
-    backgroundColor: backgroundColor,
     units: 'Bits per Second'},
   db);
   $('#topdestinationgroups' ).chart( {
@@ -338,8 +297,6 @@ $(function() {
     includeOther: false,
     metric:'top-5-destinationgroups',
     legendHeadings: ['Destination Groups'],
-    colors: colors,
-    backgroundColor: backgroundColor,
     units: 'Bits per Second'},
   db);
   $('#topgrouppairs').chart( {
@@ -348,8 +305,6 @@ $(function() {
     includeOther: false,
     metric:'top-5-grouppairs',
     legendHeadings: ['Source Group','Destination Group'],
-    colors: colors,
-    backgroundColor: backgroundColor,
     units: 'Bits per Second'},
   db);
   $('#topflows').chart( {
@@ -359,8 +314,6 @@ $(function() {
     metric:'top-5-flows',
     legendHeadings: ['Source','Destination','Protocol','Sport','Dport'],
     keyName: function(k,i) { return i === 2 ? (k === '6' ? 'tcp' : 'udp') : k; },
-    colors: colors,
-    backgroundColor: backgroundColor,
     units: 'Bits per Second'},
   db);
 
@@ -737,13 +690,7 @@ $(function() {
   refreshTopology();
 
   function getTopology() {
-    $.ajax({
-      url:topologyURL,
-      dataType: 'json',
-      success: function(data) {
-        location.href = 'data:application/json,' + encodeURIComponent(JSON.stringify(data,null,1));
-      }
-    });
+    location.href = topologyURL;
   }
 
   function refreshGroups() {
@@ -760,13 +707,7 @@ $(function() {
   refreshGroups();
 
   function getGroups() {
-    $.ajax({
-      url:groupsURL,
-      dataType: 'json',
-      success: function(data) {
-        location.href = 'data:application/json,' + encodeURIComponent(JSON.stringify(data,null,1));
-      }
-    });
+    location.href = groupsURL;
   }
 
   function refreshShortcuts() {
@@ -774,13 +715,7 @@ $(function() {
   }
 
   function getShortcuts() {
-    $.ajax({
-      url:shortcutsURL,
-      dataType: 'json',
-      success: function(data) {
-        location.href = 'data:application/json,' + encodeURIComponent(JSON.stringify(data,null,1));
-      }
-    });
+    location.href = shortcutsURL;
   }
       
   function warningDialog(message) {
