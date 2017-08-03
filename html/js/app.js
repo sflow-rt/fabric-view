@@ -153,10 +153,13 @@ $(function() {
     activate: function(event, ui) {
       var newIndex = ui.newTab.index();
       setState('tab', newIndex, true);
-      $.event.trigger({type:'updateChart'});
+      if(newIndex == 2) $.event.trigger({type:'updateTopN'});
+      else if(newIndex < 2) $.event.trigger({type:'updateChart'});
     },
     create: function(event,ui) {
-      $.event.trigger({type:'updateChart'});
+      var idx = ui.tab.index();
+      if(idx == 2) $.event.trigger({type:'updateTopN'});
+      else if(idx < 2) $.event.trigger({type:'updateChart'});
     }
   });
 
@@ -356,23 +359,23 @@ $(function() {
     });
   };
 
-  // topN table
-
+  // topN flows
+  var db_top = {};
   var top_keys = getState('keys','');
   var top_value = getState('value','');
   var top_filter = getState('filter','');
-        
+
   $('#keys')
     .val(top_keys)
     .bind( "keydown", function( event ) {
       if ( event.keyCode === $.ui.keyCode.TAB &&
         $( this ).autocomplete( "instance" ).menu.active ) {
-          event.preventDefault();
-      }
-    })
+           event.preventDefault();
+        }
+      })
     .autocomplete({
-        minLength: 0,
-        source: function( request, response) {
+      minLength: 0,
+      source: function( request, response) {
         $.getJSON(keysURL, { search: request.term.split(/,\s*/).pop() }, response)
       },
       focus: function() {
@@ -396,8 +399,8 @@ $(function() {
   $('#value')
     .val(top_value)
     .autocomplete({
-      minLength:0,
-      source:['bps', 'Bps', 'fps']
+       minLength:0,
+       source:['bps', 'Bps', 'fps']
     })
     .focus(function() { $(this).autocomplete('search'); });
 
@@ -406,8 +409,8 @@ $(function() {
     .bind( "keydown", function( event ) {
       if ( event.keyCode === $.ui.keyCode.TAB &&
         $( this ).autocomplete( "instance" ).menu.active ) {
-        event.preventDefault();
-      }
+          event.preventDefault();
+        }
     })
     .autocomplete({
       minLength: 0,
@@ -451,21 +454,21 @@ $(function() {
     setState('keys',top_keys);
     setState('value',top_value);
     setState('filter',top_filter,true);
-    emptyTopFlows();   
+    emptyTopFlows();
   });
   function valueToKey(val) {
     var key;
     switch(val) {
-    case 'bps': 
-      key = 'bytes'; 
+    case 'bps':
+      key = 'bytes';
       break;
-    case 'Bps': 
-      key = 'bytes'; 
+    case 'Bps':
+      key = 'bytes';
       break;
-    case 'fps': 
-      key = 'frames'; 
+    case 'fps':
+      key = 'frames';
       break;
-    default: 
+    default:
       key = val;
     }
     return key;
@@ -478,21 +481,21 @@ $(function() {
   function valueToTitle(val) {
     var title;
     switch(val) {
-    case 'bps': 
-      title = 'bits per second'; 
+    case 'bps':
+      title = 'Bits per Second';
       break;
     case 'bytes':
-    case 'Bps': 
-      title = 'bytes per second'; 
+      case 'Bps':
+      title = 'Bytes per Second';
       break;
     case 'frames':
-    case 'fps': 
-      title  = 'frames per second'; 
+      case 'fps':
+      title  = 'Frames per Second';
       break;
     case 'requests':
-      title = 'requests per second';
+      title = 'Requests per Second';
       break;
-    default: 
+    default:
       title = val;
     }
     return title;
@@ -503,60 +506,10 @@ $(function() {
     if(!newFilter) newFilter = "";
     if(newFilter.length > 0) newFilter += "&";
     newFilter += key + "='" + value + "'";
-    $('#filter').val(newFilter);         
+    $('#filter').val(newFilter);
     top_filter = newFilter;
     setState('filter', top_filter, true);
     emptyTopFlows();
-  }
-
-  function topFlowsClick(e) {
-    if(e.data && e.data.query && e.data.values) {
-      var col = $(this).parent().children().index($(this));
-      var row = $(this).parent().parent().children().index($(this).parent());
-      var key = e.data.query.keys.split(',')[col];
-      var val = e.data.values[row].key.split(SEP)[col];
-      addFilter(key,val,e.data.query.filter);
-    }
-  }
-  function escapeHTML(t) { return $('<div/>').text(t).html(); }
-  function updateTopFlows(data,query,scale,title) {
-    if($('#shortcutstable_wrapper').is(':visible')) return;
-
-    var i, j, row, maxVal,val,barwidth,ncols = 1, table = '';
-    table += '<table class="stripe">';
-    table += '<thead>';
-    if(query.keys && query.value) {
-      var headers = query.keys.split(',');
-      for(i = 0; i < headers.length; i++) {
-        table += '<th>' + headers[i] + '</th>';
-      }
-      table += '<th>' + title + '</th>';
-      ncols = headers.length + 1;
-    }
-    table += '</thead>';
-    table += '<tbody>';
-    if(data && data.length > 0) {
-      maxVal = data[0].value;
-      for(i = 0; i < data.length; i++) {
-        if(!data[i].key) continue;
-        table += '<tr class="' + (i % 2 === 0 ? 'even' : 'odd') + '">';
-        row = data[i].key.split(SEP);
-        for(j = 0; j < row.length; j++) {
-          table += '<td class="flowkey">' + escapeHTML(row[j]) + '</td>';
-        }
-        val = data[i].value;
-        barwidth = maxVal > 0 ? Math.round((val / maxVal) * 60) : 0;
-        barwidth = barwidth > 0 ? barwidth + "%" : "1px";
-        table += '<td class="flowvalue"><div class="bar" style="background-color:' + colors[0] + ';width: ' + barwidth + '"></div>' + nf(val * scale, 3) + '</td>';
-        table += '</tr>';
-      } 
-    } else {
-      table += '<tr class="even"><td colspan="' + ncols + '" class="alignc"><i>no data</i></td></tr>';
-    }
-    table += '</tbody>';
-    table += '</table>';
-    $('#flowtable').empty().append(table);
-    $('#flowtable tbody .flowkey').click({query:query, values:data},topFlowsClick);
   }
 
   var $shortcutsTable;
@@ -564,8 +517,8 @@ $(function() {
     $shortcutsTable = $('#shortcutstable').DataTable({
       ajax: {
         url: shortcutsURL,
-        dataSrc: function(data) { 
-          return data; 
+        dataSrc: function(data) {
+          return data;
         }
       },
       deferRenderer: true,
@@ -583,11 +536,11 @@ $(function() {
     .on('xhr', function(e,settings,json) {
       var len = json.length || 0;
       $('#numshortcuts').val(len).removeClass(len ? 'error' : 'good').addClass(len ? 'good' : 'error');;
-     })
+    })
     .on('click', 'tr', function(e) {
       var row = $shortcutsTable.row($(this));
       var shortcut = row.data();
-      if(!shortcut) return;           
+      if(!shortcut) return;
       top_keys = shortcut.keys || '';
       top_value = shortcut.value || '';
       top_filter = shortcut.filter || '';
@@ -601,26 +554,60 @@ $(function() {
     });
   }
 
+  function updateTopN(data,scale) {
+    if(!data
+      || !data.trend
+      || !data.trend.times
+      || data.trend.times.length == 0) return;
+
+    if(scale !== 1) {
+      var topn = data.trend.trends.topn;
+      for(var i = 0; i < topn.length; i++) {
+        var entry = topn[i];
+        for(var flow in entry) {
+          entry[flow]*=scale;
+        }
+      }
+    }
+
+    if(db_top.trend) {
+      // merge in new data
+      var maxPoints = db_top.trend.maxPoints;
+      var remove = db_top.trend.times.length > maxPoints ? db_top.trend.times.length - maxPoints : 0;
+      db_top.trend.times = db_top.trend.times.concat(data.trend.times);
+      if(remove) db_top.trend.times = db_top.trend.times.slice(remove);
+      for(var name in db_top.trend.trends) {
+        db_top.trend.trends[name] = db_top.trend.trends[name].concat(data.trend.trends[name]);
+        if(remove) db_top.trend.trends[name] = db_top.trend.trends[name].slice(remove);
+      }
+    } else db_top.trend = data.trend;
+
+    db_top.trend.start = new Date(db_top.trend.times[0]);
+    db_top.trend.end = new Date(db_top.trend.times[db_top.trend.times.length - 1]);
+
+    $.event.trigger({type:'updateTopN'});
+  }
+
+
   var running_topflows;
   var timeout_topflows;
   function pollTopFlows() {
     running_topflows = true;
     var query = {keys:top_keys,value:valueToKey(top_value),filter:top_filter};
+    if(db_top.trend && db_top.trend.end) query.after=db_top.trend.end.getTime();
     var scale = valueToScale(top_value);
-    var title = valueToTitle(top_value);
     $.ajax({
       url: topURL,
       data: query,
       success: function(data) {
         if(running_topflows) {
-          updateTopFlows(data,query, scale, title);
-          timeout_topflows = setTimeout(pollTopFlows, 2000);
+          updateTopN(data,scale);
+          timeout_topflows = setTimeout(pollTopFlows, 1000);
         }
       },
       error: function(result,status,errorThrown) {
-        if(running_topflows) timeout_topflows = setTimeout(pollTopFlows, 2000);
-      },
-      timeout: 60000
+        if(running_topflows) timeout_topflows = setTimeout(pollTopFlows, 5000);
+      }
     });
   }
 
@@ -631,18 +618,56 @@ $(function() {
 
   function emptyTopFlows() {
     stopPollTopFlows();
+    if(db_top.trend) {
+      $(document).off('updateTopN');
+      $('#topn').stripchart('destroy');
+      $('#topn').empty();
+      delete db_top.trend;
+    }
     if(!top_keys || !top_value) {
-    $('#shortcutstable_wrapper').show();
-    $('#flowtable').empty();
-    return;
-  }
-  $('#shortcutstable_wrapper').hide();
+      $('#shortcutstable_wrapper').show();
+      $('#topn').hide();
+      return;
+    }
+    $('#shortcutstable_wrapper').hide();
+    $('#topn').show();
+
+    if(!db_top.trend) {
+       $('#topn').chart({
+          type: 'topn',
+          legendHeadings: top_keys.split(','),
+          units:valueToTitle(top_value),
+          stack: true,
+          sep: SEP,
+          metric: 'topn',
+          updateEvent: 'updateTopN'
+       },db_top);
+    }
+
     var query = {keys:top_keys,value:valueToKey(top_value),filter:top_filter};
-    var scale = valueToScale(top_value);
-    var title = valueToTitle(top_value);
-    updateTopFlows([],query,scale,title);
     pollTopFlows();
   }
+
+  $('#topn').click(function(e) {
+    var idx,key,val,tgt = $(e.target);
+    if(tgt.is('td')) {
+      idx = tgt.index() - 1;
+      key = top_keys.split(',')[idx];
+      val = tgt.text();
+      addFilter(key,val,top_filter);
+    }
+    else if(tgt.is('div') && tgt.parent().is('td')) {
+      var row = tgt.parent().parent();
+      row.children().each(function(i,td) {
+        if(i>0) {
+          idx = i - 1;
+          key = top_keys.split(',')[idx];
+          val = $(td).text();
+          addFilter(key,val,top_filter);
+        }
+      });
+    }
+  }); 
 
   // settings
   function percentageLimits(event,ui) {

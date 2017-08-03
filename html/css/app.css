@@ -5,6 +5,7 @@ body { font-family: Verdana,Arial,sans-serif; }
 #copyright { border-top: none; font-size:60%; padding-right:5px; padding-top:0}
 #tabs { margin: 5px; min-height: 400px; font-size:80%;}
 .trend { width:100%; height:150px; }
+#top .trend { height: 300px; }
 .stripe { 
         margin: .5em 0;
 	border-collapse: collapse;
