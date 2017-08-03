@@ -820,6 +820,7 @@ $(function() {
 
   getThresholds();
 
+  function escapeHTML(t) { return $('<div/>').text(t).html(); }
   function nodeDetails(data, nodeData) {
     if(!data || !nodeData) return;
 
