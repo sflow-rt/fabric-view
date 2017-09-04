@@ -422,14 +422,11 @@ $(function() {
         return false;
       },
       select: function( event, ui ) {
-        var terms = this.value.split(/,\s*/);
-        // remove the current input
-        terms.pop();
-        // add the selected item
-        terms.push( ui.item.value );
-        // add placeholder to get the comma-and-space at the end
-        terms.push( "" );
-        this.value = terms.join( "=" );
+        var val = this.value;
+        var re = /[&|(]/g;
+        var end = 0;
+        while(re.test(val)) { end = re.lastIndex; }
+        this.value = val.substring(0,end) + ui.item.value + "=";
         return false;
       }
     })
