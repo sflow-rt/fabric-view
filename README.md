@@ -1,10 +1,16 @@
-Fabric View
+# Fabric View
 
 Real-time visibility into elephant and mice flows in ECMP / MLAG data
 center networks.
 
-Copy files to the sFlow-RT v2.1-1223+ app directory and restart to install. Online help
-is available through web UI.
+http://blog.sflow.com/2015/10/fabric-view.html
+
+## To install
+
+1. Copy files to the sFlow-RT app directory.
+2. Restart sFlow-RT to load application.
+
+Online help is available through web UI.
 
 Data captured from the two leaf / two spine 10G network described in the
 following article is included:
