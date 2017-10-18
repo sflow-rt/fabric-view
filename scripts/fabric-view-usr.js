@@ -69,38 +69,11 @@ setIntervalHandler(function() {
   }
 },1);
 
-function validShortcuts(obj) {
-  if(!Array.isArray(obj)) return false;
-  var attrs = ['category','protocol','description','keys','value','filter'];
-  for(var i = 0; i < obj.length; i++) {
-    let shortcut = obj[i];
-    for(var j = 0; j < attrs.length; j++) {
-      let attr = attrs[j];
-      if(!shortcut.hasOwnProperty(attr)) return false;
-      if(typeof shortcut[attr] !== 'string') return false;
-    }
-  }
-  return true;
-}
-
 setHttpHandler(function(req) {
   var result, trend, key, entry, path = req.path;
   if(!path || path.length === 0) throw "not_found";
      
   switch(path[0]) {
-  case 'shortcuts':
-    if(path.length > 1) throw "not_found";
-    switch(req.method) {
-    case 'POST':
-    case 'PUT':
-      if(req.error) throw "bad_request";
-      if(!validShortcuts(req.body)) throw "bad_request";
-        shortcuts = req.body;
-	storeSet('shortcuts', shortcuts);
-	break;
-    default: return shortcuts;
-    }
-    break;
   case 'flowkeys':
     if(path.length > 1) throw "not_found";
     result = [];

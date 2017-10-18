@@ -353,6 +353,20 @@ function hosts() {
   return hosts;
 }
 
+function validShortcuts(obj) {
+  if(!Array.isArray(obj)) return false;
+  var attrs = ['category','protocol','description','keys','value','filter'];
+  for(var i = 0; i < obj.length; i++) {
+    let shortcut = obj[i];
+    for(var j = 0; j < attrs.length; j++) {
+      let attr = attrs[j];
+      if(!shortcut.hasOwnProperty(attr)) return false;
+      if(typeof shortcut[attr] !== 'string') return false;
+    }
+  }
+  return true;
+}
+
 setHttpHandler(function(req) {
   var result, key, name, path = req.path;
   if(!path || path.length === 0) throw "not_found";

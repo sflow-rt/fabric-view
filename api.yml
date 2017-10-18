@@ -1,0 +1,373 @@
+swagger: "2.0"
+info:
+  title: Fabric View
+  description: Real-time leaf and spine performance metrics
+
+  version: 1.0.0
+
+paths:
+
+  /fabric-view.js/thresholds/json:
+    get:
+      summary: Get thresholds
+      tags:
+        - thresholds
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+    put:
+      summary: Set thresholds
+      tags:
+        - thresholds
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              utilization:
+                description: Percentage utilization threshold for busy link
+                type: integer
+                example: 80
+              elephant:
+                description: Percentage utilization threshold for elephant flow
+                type: integer
+                example: 10
+      responses:
+        204:
+          description: No content
+    post:
+      summary: Set thresholds
+      tags:
+        - thresholds
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties: 
+              utilization:
+                description: Percentage utilization threshold for busy link
+                type: integer
+                example: 80
+              elephant:
+                description: Percentage utilization threshold for elephant flow
+                type: integer
+                example: 10
+      responses:
+        204:
+          description: No content
+
+  /fabric-view.js/topology/json:
+    get:
+      summary: Get topology
+      tags:
+        - topology
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+    put:
+      summary: Set topology
+      tags:
+        - topology
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              nodes:
+                type: object
+                example:
+                  leaf1:
+                    agent: 10.0.0.1
+                    ports:
+                      eth1:
+                        ifindex: "2"
+                  spine1:
+                    agent: 10.0.0.2
+                    ports:
+                      eth2:
+                        ifindex: "3"
+              links:
+                type: object
+                example:
+                  link1:
+                    node1: leaf1
+                    port1: eth1
+                    node2: spine1
+                    port2: eth2
+      responses:
+        204:
+          description: No content
+        400:
+          description: Bad request
+    post:
+      summary: Set topology
+      tags:
+        - topology
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              nodes:
+                type: object
+                example:
+                  leaf1:
+                    agent: 10.0.0.1
+                    ports:
+                      eth1:
+                        ifindex: "2"
+                  spine1:
+                    agent: 10.0.0.2
+                    ports:
+                      eth2:
+                        ifindex: "3"
+              links:
+                type: object
+                example:
+                  link1:
+                    node1: leaf1
+                    port1: eth1
+                    node2: spine1
+                    port2: eth2
+      responses:
+        204:
+          description: No content
+        400:
+          description: Bad request
+
+  /fabric-view.js/groups/json:
+    get:
+      summary: Get address groups
+      tags:
+        - groups
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+    put:
+      summary: Set address groups
+      tags:
+        - groups
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            example:
+              external:
+                - 0.0.0.0/0
+              internal:
+                - 10.0.0.0/8
+                - 172.16.0.0/12
+                - 192.168.0.0/16
+      responses:
+        204:
+          description: No content
+        400:
+          description: Bad request
+    post:
+      summary: Set address groups
+      tags:
+        - groups
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            example:
+              external:
+                - 0.0.0.0/0 
+              internal:
+                - 10.0.0.0/8  
+                - 172.16.0.0/12
+                - 192.168.0.0/16
+      responses:
+        204:
+          description: No content
+        400:
+          description: Bad request
+
+  /fabric-view.js/shortcuts/json:
+    get:
+      summary: Get top flows shortcuts
+      tags:
+        - shortcuts
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+    put:
+      summary: Set top flows shortcuts
+      tags:
+        - shortcuts
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: array
+            items:
+              type: object
+              required:
+                - category
+                - protocol
+                - description
+                - keys
+                - value 
+              properties:
+                category:
+                  description: Category grouping flow definitions
+                  type: string
+                  example: Traffic
+                protocol:
+                  description: Protocol associated with flow definition
+                  type: string
+                  example: IP
+                description:
+                  description: Description of flow definition
+                  type: string
+                  example: Best effort source-destination pairs
+                keys:
+                  description: Flow keys
+                  type: string
+                  example: ipsource,ipdestination
+                value:
+                  description: Flow value
+                  type: string
+                  example: bps
+                filter:
+                  description: Flow filter
+                  type: string
+                  example: "ipdscp=0"
+      responses:
+        204:
+          description: No content
+        400:
+          description: Bad request
+    post:
+      summary: Set top flows shortcuts
+      tags:
+        - shortcuts
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: array
+            items:
+              type: object
+              required:
+                - category
+                - protocol
+                - description
+                - keys
+                - value
+              properties:
+                category:
+                  description: Category grouping flow definitions
+                  type: string
+                  example: Traffic
+                protocol:
+                  description: Protocol associated with flow definition
+                  type: string
+                  example: IP
+                description:
+                  description: Description of flow definition
+                  type: string
+                  example: Best effort source-destination pairs
+                keys:
+                  description: Flow keys
+                  type: string
+                  example: ipsource,ipdestination
+                value:
+                  description: Flow value
+                  type: string
+                  example: bps
+                filter:
+                  description: Flow filter
+                  type: string
+                  example: "ipdscp=0"
+      responses:
+        204:
+          description: No content
+        400:
+          description: Bad request
+
+  /fabric-view.js/metric/json:
+    get:
+      summary: Get latest metric values
+      tags:
+        - metrics
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+ 
+  /fabric-view.js/metric/{name}/json:
+    get:
+      summary: Get latest value of named metric
+      tags:
+        - metrics
+      produces:
+        - application/json
+      parameters:
+        - name: name
+          in: path
+          type: string
+          description: Metric name
+          required: true
+      responses:
+        200:
+          description: OK
+        404:
+          description: Not found
+
+  /fabric-view.js/nodes/json:
+    get:
+      summary: Get information on switches
+      tags:
+        - topology
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+
+  /fabric-view.js/links/json:
+    get:
+      summary: Get information on links
+      tags:
+        - topology
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+
+  /fabric-view.js/hosts/json:
+    get:
+      summary: Get information on hosts
+      tags:
+        - topology
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
