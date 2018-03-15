@@ -32,6 +32,21 @@ function calculateTopN(metric,n,minVal, edge_bps) {
   return topN;
 }
 
+function calculateTopInterface(metric,n) {
+  var top = table('TOPOLOGY','sort:'+metric+':-'+n);
+  var topN = {};
+  if(top) {
+    for(var i = 0; i < top.length; i++) {
+      var val = top[i][0];
+      var port = topologyInterfaceToPort(val.agent,val.dataSource);
+      if(port && port.node && port.port) {
+        topN[port.node + SEP + port.port] = val.metricValue;
+      }
+    }
+  }
+  return topN;
+}
+
 function getMetric(res, idx, defVal) {
   var val = defVal;
   if(res && res.length && res.length > idx && res[idx].hasOwnProperty('metricValue')) val = res[idx].metricValue;
@@ -110,6 +125,13 @@ setIntervalHandler(function(now) {
   points['top-5-destinationgroups'] = calculateTopN('fv-destinationgroups',5,100,edge_bps);
   points['top-5-grouppairs'] = calculateTopN('fv-grouppairs', 5,100,edge_bps);
   points['top-5-flows'] = calculateTopN('fv-flow',5,100,edge_bps);
+
+  points['top-5-indiscards'] = calculateTopInterface('ifindiscards',5);
+  points['top-5-outdiscards'] = calculateTopInterface('ifoutdiscards',5);
+  points['top-5-inerrors'] = calculateTopInterface('ifinerrors',5);
+  points['top-5-outerrors'] = calculateTopInterface('ifouterrors',5);
+  points['top-5-inutilization'] = calculateTopInterface('ifinutilization',5);
+  points['top-5-oututilization'] = calculateTopInterface('ifoututilization',5);
 
   sharedSet('stats',points);
 },1);

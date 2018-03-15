@@ -7,8 +7,6 @@
 include(scriptdir()+'/inc/common.js');
 include(scriptdir()+'/inc/trend.js');
 
-var SEP = '_SEP_';
-
 var userFlows = {};
 var maxFlows = 10;
 

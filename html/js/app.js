@@ -27,6 +27,9 @@ $(function() {
     perf3:'hide',
     perf4:'hide',
     perf5:'hide',
+    ports0:'show',
+    ports1:'show',
+    ports2:'show',
     traf0:'show',
     traf1:'hide',
     traf2:'hide',
@@ -118,6 +121,19 @@ $(function() {
       activate: function(event, ui) {
         var newIndex = $(this).accordion('option','active');
         setState('perf'+idx, newIndex === 0 ? 'show' : 'hide', true);
+        $.event.trigger({type:'updateChart'});
+      }
+    });
+  });
+
+  $('#ports-acc > div').each(function(idx) {
+    $(this).accordion({
+      heightStyle:'content',
+      collapsible: true,
+      active: getState('ports'+idx, 'hide') == 'show' ? 0 : false,
+      activate: function(event, ui) {
+        var newIndex = $(this).accordion('option','active');
+        setState('ports'+idx, newIndex === 0 ? 'show' : 'hide', true);
         $.event.trigger({type:'updateChart'});
       }
     });
@@ -251,6 +267,62 @@ $(function() {
     legend: ['ACL Ingress Table','ACL Ingress Meters Table','ACL Ingress Counters Table','ACL Egress Table','ACL Egress Meters Table','ACL Egress Counters Table'],
     metrics:['hw_acl_ingress_util','hw_acl_ingress_meters_util','hw_acl_ingress_counters_util','hw_acl_egress_util','hw_acl_egress_meters_util','hw_acl_egress_counters_util'],
     units: 'Percentage'},
+  db);
+
+  // Top port charts (type: topn)
+  $('#utilizationin').chart({
+    type: 'topn',
+    metric: 'top-5-inutilization',
+    legendHeadings:['Switch','Ingress Port'],
+    stack: false,
+    includeOther:false,
+    sep: SEP,
+    units: '% Utilization'},
+  db);
+  $('#utilizationout').chart({
+    type: 'topn',
+    metric: 'top-5-oututilization',
+    legendHeadings:['Switch','Egress Port'],
+    stack: false,
+    includeOther:false,
+    sep: SEP,
+    units: '% Utilization'},
+  db);
+  $('#discardsin').chart({
+    type: 'topn',
+    metric: 'top-5-indiscards',
+    legendHeadings:['Switch','Ingress Port'],
+    stack: false,
+    includeOther:false,
+    sep: SEP,
+    units: 'Frames per Second'},
+  db);
+  $('#discardsout').chart({
+    type: 'topn',
+    metric: 'top-5-outdiscards',
+    legendHeadings:['Switch','Egress Port'],
+    stack: false,
+    includeOther:false,
+    sep: SEP,
+    units: 'Frames per Second'},
+  db);
+  $('#errorsin').chart({
+    type: 'topn',
+    metric: 'top-5-inerrors',
+    legendHeadings:['Switch','Ingress Port'],
+    stack: false,
+    includeOther:false,
+    sep: SEP,
+    units: 'Frames per Second'},
+  db);
+  $('#errorsout').chart({
+    type: 'topn',
+    metric: 'top-5-outerrors',
+    legendHeadings:['Switch','Egress Port'],
+    stack: false,
+    includeOther:false,
+    sep: SEP,
+    units: 'Frames per Second'},
   db);
 
   // Traffic charts (type:topn)
