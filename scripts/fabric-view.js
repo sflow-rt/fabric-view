@@ -135,8 +135,7 @@ setFlow('fv-bytes', {value:'bytes', t:flow_timeout});
 
 initializeUserMetrics(opt);
 
-setIntervalHandler(function() {
-  var now = (new Date()).getTime();
+setIntervalHandler(function(now) {
   points = {};
   var elephants = sharedGet('elephants');
   if(elephants) extend(points,elephants);
@@ -145,7 +144,7 @@ setIntervalHandler(function() {
   // mice = total - elephants
   // variance can result in negative value if values are close
   if(elephants && stats) points['mice_bps'] = Math.max(0, points['edge_bps'] - points['elephant_bps']);
-  trend.addPoints(points);
+  trend.addPoints(now,points);
 },1);
 
 function numberMetric(metric) {

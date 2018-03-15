@@ -64,9 +64,8 @@ var metric_list = [
   'max:bcm_acl_egress_counters_utilization'
 ];
 
-setIntervalHandler(function() {
-  var now, res, top, edge_bps, edge_fps, mice_bps, edge;
-  now = (new Date()).getTime();
+setIntervalHandler(function(now) {
+  var res, top, edge_bps, edge_fps, mice_bps, edge;
 
   points = {};
 

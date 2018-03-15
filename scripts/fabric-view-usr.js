@@ -36,7 +36,7 @@ function flowSpec(keys,value,filter) {
     try {
       setFlow(name,{keys:keysStr, value:valueStr, filter: filterStr.length > 0 ? filterStr : null, t:flow_timeout, n:maxFlows, fs:SEP});
       entry = {name:name, trend: new Trend(300,1)};
-      entry.trend.addPoints({topn:{}});
+      entry.trend.addPoints(Date.now(), {topn:{}});
       userFlows[key] = entry;
       specID++;
     } catch(e) {
@@ -49,8 +49,8 @@ function flowSpec(keys,value,filter) {
   return entry;
 }
 
-setIntervalHandler(function() {
-  var key, entry, top, topN, i, now = (new Date()).getTime();
+setIntervalHandler(function(now) {
+  var key, entry, top, topN, i;
   for(key in userFlows) {
     entry = userFlows[key];
     if(now - entry.lastQuery > 10000) {
@@ -64,7 +64,7 @@ setIntervalHandler(function() {
           topN[top[i].key] = top[i].value;
         }
       }
-      entry.trend.addPoints({topn:topN}); 
+      entry.trend.addPoints(now,{topn:topN}); 
     }
   }
 },1);

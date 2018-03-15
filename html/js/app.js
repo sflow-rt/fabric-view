@@ -750,10 +750,10 @@ $(function() {
   $('#thresholdset').button({icons:{primary:'ui-icon-arrowstop-1-n'},text:false}).click(setThresholds);
   $('#topologyrefresh').button({icons:{primary:'ui-icon-arrowrefresh-1-e'},text:false}).click(refreshTopology);
   $('#topologyget').button({icons:{primary:'ui-icon-search'},text:false}).click(getTopology);
-  $('#topologyfile').hide().change(function(evt) {
+  $('#topologyfile').hide().change(function(event) {
     var input = event.target;
     var reader = new FileReader();
-    $this = $(this);
+    var $this = $(this);
     reader.onload = function(){
       var text = reader.result;
       $this.wrap('<form>').closest('form').get(0).reset();
@@ -772,10 +772,10 @@ $(function() {
   $('#topologyset').button({icons:{primary:'ui-icon-arrowstop-1-n'},text:false}).click(function() {$('#topologyfile').click();});
   $('#groupsrefresh').button({icons:{primary:'ui-icon-arrowrefresh-1-e'},text:false}).click(refreshGroups);
   $('#groupsget').button({icons:{primary:'ui-icon-search'},text:false}).click(getGroups);
-  $('#groupsfile').hide().change(function(evt) {
+  $('#groupsfile').hide().change(function(event) {
     var input = event.target;
     var reader = new FileReader();
-    $this = $(this);
+    var $this = $(this);
     reader.onload = function(){
       var text = reader.result;
       $this.wrap('<form>').closest('form').get(0).reset();
@@ -794,10 +794,10 @@ $(function() {
   $('#groupsset').button({icons:{primary:'ui-icon-arrowstop-1-n'},text:false}).click(function() {$('#groupsfile').click();});
   $('#shortcutsrefresh').button({icons:{primary:'ui-icon-arrowrefresh-1-e'},text:false}).click(refreshShortcuts);
   $('#shortcutsget').button({icons:{primary:'ui-icon-search'},text:false}).click(getShortcuts);
-  $('#shortcutsfile').hide().change(function(evt) {
+  $('#shortcutsfile').hide().change(function(event) {
     var input = event.target;
     var reader = new FileReader();
-    $this = $(this);
+    var $this = $(this);
     reader.onload = function(){
       var text = reader.result;
       $this.wrap('<form>').closest('form').get(0).reset();
@@ -902,8 +902,8 @@ $(function() {
         {},
         { class: 'alignr', render: function(data, type, row) { return data === -1 ? '' : data.toFixed(2); }, targets:2},
         { class: 'alignr', render: function(data, type, row) { return data === -1 ? '' : data.toFixed(2); }, targets:3},      
-        { class: 'alignr', render: function(data, type, row) { return data === -1 ? '' : data.toFixed(2); },  targets:4 },
-        { class: 'alignr', render: function(data, type, row) { return data === -1 ? '' : data.toFixed(2); },  targets:5 },
+        { class: 'alignr', render: function(data, type, row) { return data === -1 ? '' : data.toFixed(2); }, targets:4},
+        { class: 'alignr', render: function(data, type, row) { return data === -1 ? '' : data.toFixed(2); }, targets:5},
         { class: 'alignr', render: function(data, type, row) { return data === -1 ? '' : (data /  86400).toFixed(2); },  targets:6 },
         { class: 'alignr', targets: 7},
         { class: 'alignr',targets: 8},

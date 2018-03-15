@@ -182,11 +182,9 @@ function updateBusyLinks(now) {
   }
 }
 
-setIntervalHandler(function() {
+setIntervalHandler(function(now) {
   opt = sharedGet('opt');
   if(!opt) return;
-
-  var now = (new Date()).getTime();
 
   updateElephants(now);
   updateBusyLinks(now);
