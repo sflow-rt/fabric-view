@@ -1117,13 +1117,11 @@ $(function() {
     $.event.trigger({type:'updateChart'});
   });
 
-  $(document).ready(function() {
-    initializeVersion();
-    pollTrends();
-    initializeShortcutsTable();
-    emptyTopFlows();
-    initializeNodesTable();
-    initializeLinksTable();
-    initializeHostsTable();
-  });
+  initializeVersion();
+  pollTrends();
+  initializeShortcutsTable();
+  emptyTopFlows();
+  initializeNodesTable();
+  initializeLinksTable();
+  initializeHostsTable();
 });
