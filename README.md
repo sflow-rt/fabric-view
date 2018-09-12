@@ -7,8 +7,9 @@ http://blog.sflow.com/2015/10/fabric-view.html
 
 ## To install
 
-1. Copy files to the sFlow-RT app directory.
-2. Restart sFlow-RT to load application.
+1. [Download sFlow-RT](https://sflow-rt.com/download.php)
+2. Run command: `sflow-rt/get-app.sh sflow-rt fabric-view`
+3. Restart sFlow-RT
 
 Online help is available through web UI.
 
