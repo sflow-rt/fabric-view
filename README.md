@@ -11,6 +11,9 @@ http://blog.sflow.com/2015/10/fabric-view.html
 2. Run command: `sflow-rt/get-app.sh sflow-rt fabric-view`
 3. Restart sFlow-RT
 
+Alternatively, use the Docker image:
+https://hub.docker.com/r/sflow/fabric-view/
+
 Online help is available through web UI.
 
 Data captured from the two leaf / two spine 10G network described in the
