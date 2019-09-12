@@ -89,12 +89,12 @@ $(function() {
   }
 
   function getState(key, defVal) {
-    return window.sessionStorage.getItem(key) || state[key] || defVal;
+    return window.sessionStorage.getItem('fv_'+key) || state[key] || defVal;
   }
 
   function setState(key, val, showQuery) {
     state[key] = val;
-    window.sessionStorage.setItem(key, val);
+    window.sessionStorage.setItem('fv_'+key, val);
     if(showQuery) {
       var query = createQuery(state);
       window.history.replaceState({},'',query ? '?' + query : './');
@@ -705,7 +705,7 @@ $(function() {
     if(!db_top.trend) {
        $('#topn').chart({
           type: 'topn',
-          legendHeadings: top_keys.split(','),
+          legendHeadings: top_keys.match(/(\\.|[^,])+/g),
           units:valueToTitle(top_value),
           stack: true,
           sep: SEP,
@@ -722,7 +722,7 @@ $(function() {
     var idx,key,val,tgt = $(e.target);
     if(tgt.is('td')) {
       idx = tgt.index() - 1;
-      key = top_keys.split(',')[idx];
+      key = top_keys.match(/(\\.|[^,])+/g)[idx];
       val = tgt.text();
       addFilter(key,val,top_filter);
     }
