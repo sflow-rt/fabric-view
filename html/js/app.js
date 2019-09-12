@@ -575,7 +575,7 @@ $(function() {
     var newFilter = filter;
     if(!newFilter) newFilter = "";
     if(newFilter.length > 0) newFilter += "&";
-    newFilter += key + "='" + value + "'";
+    newFilter += "'" + key + "'='" + value + "'";
     $('#filter').val(newFilter);
     top_filter = newFilter;
     setState('filter', top_filter, true);
