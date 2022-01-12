@@ -10,12 +10,6 @@ include(scriptdir()+'/inc/trend.js');
 var userFlows = {};
 var maxFlows = 10;
 
-function escapeRegExp(str) {
-  // seems like a bug - Rhino doesn't convert Java strings into native JavaScript strings
-  str = new String(str);
-  return str ? str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") : null;
-}
-
 var specID = 0;
 function flowSpec(keys,value,filter) {
   var keysStr = keys ? keys.join(',') : '';
@@ -77,7 +71,7 @@ setHttpHandler(function(req) {
     result = [];
     var search = req.query['search'];
     if(search) {
-      var matcher = new RegExp('^' + escapeRegExp(search), 'i');
+      var matcher = new RegExp('^' + search[0].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i');
       for(key in flowKeys()) {
         if(matcher.test(key)) result.push(key);
       }
